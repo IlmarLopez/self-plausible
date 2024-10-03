@@ -1,0 +1,13 @@
+{
+  "name": "plausible-hosting",
+  "version": "1.0.0",
+  "scripts": {
+    "synth": "cd cdk && npx cdk synth",
+    "deploy": "cd cdk && cdk deploy --all --require-approval never",
+    "diff": "cd cdk && cdk diff"
+  },
+  "dependencies": {
+    "aws-cdk": "^2.151.0",
+    "npm": "^10.8.0"
+  }
+}
