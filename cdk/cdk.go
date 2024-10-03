@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	"github.com/IlmarLopez/plausible-hosting/cdk/plausible-hosting/lib"
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/jsii-runtime-go"
 )
@@ -10,7 +11,7 @@ import (
 func main() {
 	app := awscdk.NewApp(nil)
 
-	NewPlausibleStack(app, "PlausibleStack", &PlausibleStackProps{
+	lib.NewPlausibleStack(app, "PlausibleStack", &lib.PlausibleStackProps{
 		StackProps: awscdk.StackProps{
 			Env: env(),
 		},
