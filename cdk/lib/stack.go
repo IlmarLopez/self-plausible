@@ -126,7 +126,7 @@ func NewPlausibleStack(scope constructs.Construct, id string, props *PlausibleSt
 		MachineImage:  ami,
 		Vpc:           vpc,
 		SecurityGroup: sg,
-		KeyName:       jsii.String("plausible-keypair"),
+		KeyPair:       ec2.KeyPair_FromKeyPairName(stack, jsii.String("KeyPairName"), jsii.String("plausible-keypair")),
 		Role:          role,
 		UserData:      userData,
 	})
