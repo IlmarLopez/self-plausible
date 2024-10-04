@@ -82,7 +82,7 @@ func NewPlausibleStack(scope constructs.Construct, id string, props *PlausibleSt
 		jsii.String("sudo systemctl enable nginx"),
 		jsii.String("sudo systemctl start nginx"),
 		// Configure Nginx
-		jsii.String(fmt.Sprintf("sudo bash -c 'cat > /etc/nginx/sites-available/plausible << \"EOF\"\n"+
+		jsii.String("sudo bash -c 'cat > /etc/nginx/sites-available/plausible << EOF'\n"+
 			"server {\n"+
 			"    listen 80;\n"+
 			"    server_name analytics.ilmarlopez.com;\n\n"+
@@ -94,7 +94,7 @@ func NewPlausibleStack(scope constructs.Construct, id string, props *PlausibleSt
 			"        proxy_set_header X-Forwarded-Proto \\$scheme;\n"+
 			"    }\n"+
 			"}\n"+
-			"EOF'")),
+			"EOF\n"),
 		jsii.String("sudo ln -s /etc/nginx/sites-available/plausible /etc/nginx/sites-enabled/"),
 		jsii.String("sudo rm /etc/nginx/sites-enabled/default"),
 		jsii.String("sudo nginx -t"),
