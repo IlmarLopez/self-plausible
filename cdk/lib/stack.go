@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"encoding/base64"
 	"fmt"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
@@ -59,6 +60,21 @@ func NewPlausibleStack(scope constructs.Construct, id string, props *PlausibleSt
 		Shebang: jsii.String("#!/bin/bash"),
 	})
 
+	nginxConfigContent := `server {
+    listen 80;
+    server_name analytics.ilmarlopez.com;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+	}`
+
+	encodedNginxConfig := base64.StdEncoding.EncodeToString([]byte(nginxConfigContent))
+
 	// Add commands
 	linuxCommands.AddCommands(
 		jsii.String("sudo apt-get update -y"),
@@ -82,19 +98,7 @@ func NewPlausibleStack(scope constructs.Construct, id string, props *PlausibleSt
 		jsii.String("sudo systemctl enable nginx"),
 		jsii.String("sudo systemctl start nginx"),
 		// Configure Nginx
-		jsii.String("sudo bash -c 'cat > /etc/nginx/sites-available/plausible << EOF'\n"+
-			"server {\n"+
-			"    listen 80;\n"+
-			"    server_name analytics.ilmarlopez.com;\n\n"+
-			"    location / {\n"+
-			"        proxy_pass http://localhost:8000;\n"+
-			"        proxy_set_header Host \\$host;\n"+
-			"        proxy_set_header X-Real-IP \\$remote_addr;\n"+
-			"        proxy_set_header X-Forwarded-For \\$proxy_add_x_forwarded_for;\n"+
-			"        proxy_set_header X-Forwarded-Proto \\$scheme;\n"+
-			"    }\n"+
-			"}\n"+
-			"EOF\n"),
+		jsii.String(fmt.Sprintf("echo '%s' | base64 -d | sudo tee /etc/nginx/sites-available/plausible", encodedNginxConfig)),
 		jsii.String("sudo ln -s /etc/nginx/sites-available/plausible /etc/nginx/sites-enabled/"),
 		jsii.String("sudo rm /etc/nginx/sites-enabled/default"),
 		jsii.String("sudo nginx -t"),
