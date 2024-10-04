@@ -76,7 +76,7 @@ func NewPlausibleStack(scope constructs.Construct, id string, props *PlausibleSt
 		jsii.String("git clone https://github.com/IlmarLopez/plausible-hosting.git"),
 		jsii.String("cd plausible-hosting"),
 		// Start Docker Compose
-		jsii.String("sudo compose up -d"),
+		jsii.String("sudo docker-compose up -d"),
 		// Install Nginx and Certbot
 		jsii.String("sudo apt-get install -y nginx python3-certbot-nginx"),
 		jsii.String("sudo systemctl enable nginx"),
