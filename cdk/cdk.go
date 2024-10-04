@@ -11,7 +11,7 @@ import (
 func main() {
 	app := awscdk.NewApp(nil)
 
-	lib.NewPlausibleStack(app, "PlausibleStack", &lib.PlausibleStackProps{
+	lib.NewPlausibleStack(app, "plausible-stack", &lib.PlausibleStackProps{
 		StackProps: awscdk.StackProps{
 			Env: env(),
 		},
