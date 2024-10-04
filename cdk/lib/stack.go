@@ -133,7 +133,7 @@ func NewPlausibleStack(scope constructs.Construct, id string, props *PlausibleSt
 		UserData:      userData,
 	})
 
-	// Assign an Elastic IP to the EC2 instance
+	// Assign an Elastic IP to the EC2 instance.
 	eip := ec2.NewCfnEIP(stack, jsii.String("InstanceEIP"), &ec2.CfnEIPProps{
 		Domain:     jsii.String("vpc"),
 		InstanceId: instance.InstanceId(),
