@@ -82,21 +82,20 @@ func NewPlausibleStack(scope constructs.Construct, id string, props *PlausibleSt
 		jsii.String("sudo systemctl enable nginx"),
 		jsii.String("sudo systemctl start nginx"),
 		// Configure Nginx
-		jsii.String(`
-			sudo bash -c 'cat > /etc/nginx/sites-available/plausible <<'EOF'
-			server {
-					listen 80;
-					server_name analytics.ilmarlopez.com;
-
-					location / {
-							proxy_pass http://localhost:8000;
-							proxy_set_header Host $host;
-							proxy_set_header X-Real-IP $remote_addr;
-							proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-							proxy_set_header X-Forwarded-Proto $scheme;
-					}
-			}
-			EOF'`),
+		jsii.String(
+			"sudo bash -c \"cat > /etc/nginx/sites-available/plausible <<'EOF'\n"+
+				"server {\n"+
+				"    listen 80;\n"+
+				"    server_name analytics.ilmarlopez.com;\n\n"+
+				"    location / {\n"+
+				"        proxy_pass http://localhost:8000;\n"+
+				"        proxy_set_header Host $host;\n"+
+				"        proxy_set_header X-Real-IP $remote_addr;\n"+
+				"        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n"+
+				"        proxy_set_header X-Forwarded-Proto $scheme;\n"+
+				"    }\n"+
+				"}\n"+
+				"EOF\""),
 		jsii.String("sudo ln -s /etc/nginx/sites-available/plausible /etc/nginx/sites-enabled/"),
 		jsii.String("sudo rm /etc/nginx/sites-enabled/default"),
 		jsii.String("sudo nginx -t"),
