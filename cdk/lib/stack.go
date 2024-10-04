@@ -120,7 +120,7 @@ EOF
 
 	// Create the EC2 instance with the specified User Data
 	instance := ec2.NewInstance(stack, jsii.String("PlausibleInstance"), &ec2.InstanceProps{
-		InstanceType:  ec2.InstanceType_Of(ec2.InstanceClass_BURSTABLE3, ec2.InstanceSize_MICRO),
+		InstanceType:  ec2.InstanceType_Of(ec2.InstanceClass_T4G, ec2.InstanceSize_SMALL),
 		MachineImage:  ami,
 		Vpc:           vpc,
 		SecurityGroup: sg,
