@@ -58,8 +58,8 @@ func NewPlausibleStack(scope constructs.Construct, id string, props *PlausibleSt
 
 	// Lookup the latest Ubuntu 20.04 AMI
 	ami := ec2.MachineImage_Lookup(&ec2.LookupMachineImageProps{
-		Name:   jsii.String("ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"),
-		Owners: &[]*string{jsii.String("099720109477")}, // Canonical account ID (Ubuntu)
+		Name:   jsii.String("ubuntu/images/hvm-ssd/ubuntu-focal-20.04-arm64-server-*"),
+		Owners: &[]*string{jsii.String("099720109477")},
 	})
 
 	// Define User Data script for Linux instances
