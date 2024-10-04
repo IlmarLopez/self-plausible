@@ -27,3 +27,4 @@ cdk.out
 node_modules
 
 package-lock.json
+cdk/cdk.context.json
