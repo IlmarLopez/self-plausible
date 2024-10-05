@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   plausible_db:
     image: postgres:16-alpine
@@ -5,7 +7,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       start_period: 1m
@@ -17,8 +19,6 @@ services:
       - event-data:/var/lib/clickhouse
       - event-logs:/var/log/clickhouse-server
       - ./clickhouse/logs.xml:/etc/clickhouse-server/config.d/logs.xml:ro
-      # This makes ClickHouse bind to IPv4 only, since Docker doesn't enable IPv6 in bridge networks by default.
-      # Fixes "Listen [::]:9000 failed: Address family for hostname not supported" warnings.
       - ./clickhouse/ipv4-only.xml:/etc/clickhouse-server/config.d/ipv4-only.xml:ro
     ulimits:
       nofile:
@@ -46,43 +46,41 @@ services:
         soft: 65535
         hard: 65535
     environment:
-      # required: https://github.com/plausible/community-edition/wiki/configuration#required
-      - BASE_URL=${BASE_URL}
-      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
-      # optional: https://github.com/plausible/community-edition/wiki/configuration#optional
-      # registration: https://github.com/plausible/community-edition/wiki/configuration#registration
-      - TOTP_VAULT_KEY
-      - DISABLE_REGISTRATION
-      - ENABLE_EMAIL_VERIFICATION
-      # web: https://github.com/plausible/community-edition/wiki/configuration#web
-      - HTTP_PORT
-      - HTTPS_PORT
-      # databases: https://github.com/plausible/community-edition/wiki/configuration#database
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@plausible_db:5432/plausible_db
-      - CLICKHOUSE_DATABASE_URL=http://default:@plausible_events_db:8123/plausible_events_db
-      # Google: https://github.com/plausible/community-edition/wiki/configuration#google
-      - GOOGLE_CLIENT_ID
-      - GOOGLE_CLIENT_SECRET
-      # geolocation: https://github.com/plausible/community-edition/wiki/configuration#ip-geolocation
-      - IP_GEOLOCATION_DB
-      - GEONAMES_SOURCE_FILE
-      - MAXMIND_LICENSE_KEY
-      - MAXMIND_EDITION
-      # email: https://github.com/plausible/community-edition/wiki/configuration#email
-      - MAILER_ADAPTER
-      - MAILER_EMAIL
-      - MAILER_NAME
-      - SMTP_HOST_ADDR
-      - SMTP_HOST_PORT
-      - SMTP_USER_NAME
-      - SMTP_USER_PWD
-      - SMTP_HOST_SSL_ENABLED
-      - POSTMARK_API_KEY
-      - MAILGUN_API_KEY
-      - MAILGUN_DOMAIN
-      - MAILGUN_BASE_URI
-      - MANDRILL_API_KEY
-      - SENDGRID_API_KEY
+      # required
+      BASE_URL: ${BASE_URL}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      # optional
+      TOTP_VAULT_KEY: ${TOTP_VAULT_KEY}
+      DISABLE_REGISTRATION: ${DISABLE_REGISTRATION}
+      ENABLE_EMAIL_VERIFICATION: ${ENABLE_EMAIL_VERIFICATION}
+      HTTP_PORT: ${HTTP_PORT}
+      HTTPS_PORT: ${HTTPS_PORT}
+      # databases
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@plausible_db:5432/plausible_db
+      CLICKHOUSE_DATABASE_URL: http://default:@plausible_events_db:8123/plausible_events_db
+      # Google
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      # geolocation
+      IP_GEOLOCATION_DB: ${IP_GEOLOCATION_DB}
+      GEONAMES_SOURCE_FILE: ${GEONAMES_SOURCE_FILE}
+      MAXMIND_LICENSE_KEY: ${MAXMIND_LICENSE_KEY}
+      MAXMIND_EDITION: ${MAXMIND_EDITION}
+      # email
+      MAILER_ADAPTER: ${MAILER_ADAPTER}
+      MAILER_EMAIL: ${MAILER_EMAIL}
+      MAILER_NAME: ${MAILER_NAME}
+      SMTP_HOST_ADDR: ${SMTP_HOST_ADDR}
+      SMTP_HOST_PORT: ${SMTP_HOST_PORT}
+      SMTP_USER_NAME: ${SMTP_USER_NAME}
+      SMTP_USER_PWD: ${SMTP_USER_PWD}
+      SMTP_HOST_SSL_ENABLED: ${SMTP_HOST_SSL_ENABLED}
+      POSTMARK_API_KEY: ${POSTMARK_API_KEY}
+      MAILGUN_API_KEY: ${MAILGUN_API_KEY}
+      MAILGUN_DOMAIN: ${MAILGUN_DOMAIN}
+      MAILGUN_BASE_URI: ${MAILGUN_BASE_URI}
+      MANDRILL_API_KEY: ${MANDRILL_API_KEY}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
 
 volumes:
   db-data:
